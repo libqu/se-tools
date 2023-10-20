@@ -389,7 +389,7 @@ def hyphenate(xhtml: Union[str, EasyXmlTree], language: Optional[str], ignore_h_
 			raise se.InvalidLanguageException("No [attr]xml:lang[/] or [attr]lang[/] attribute on [xhtml]<html>[/] element; couldn’t guess file language.") from ex
 
 	# Cope with known missing languages
-	if language in ["en-AU", "en-CA", "en-IE"] :
+	if language in ["en-AU", "en-CA", "en-IE"] or ["zh-Hant", "zh-Hans", "zh-TW", "zh-CN"]:
 		language = "en-GB"
 
 	language = language.replace("-", "_")
