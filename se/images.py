@@ -610,7 +610,13 @@ def _d_apply_matrix(d_attrib: str, matrix: List) -> str:
 
 def _parse_font(font_path: Path) -> dict:
 	with open(font_path, "rt", encoding="utf-8") as font_svg_raw:
-		xml = etree.fromstring(str.encode(font_svg_raw.read()))
+		# xml = etree.fromstring(str.encode(font_svg_raw.read()))
+		try:
+			# huge_tree allows XML files of arbitrary size, like huge Chinese fonts
+			custom_parser = etree.XMLParser(huge_tree=True)
+			xml = etree.fromstring(str.encode(font_svg_raw.read()), parser=custom_parser)
+		except etree.XMLSyntaxError as ex:
+			raise se.InvalidXmlException(f"Couldn’t parse XML. Exception: {ex}") from ex
 	font: Dict = {"glyphs": {}, "hkern": {}, "meta": {}}
 	glyphs = font["glyphs"]
 	hkern = font["hkern"]
